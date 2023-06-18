@@ -1,15 +1,13 @@
 {
-    "compilerOptions": {
-      "noImplicitAny": true,
-      "removeComments": true,
-      "noImplicitReturns": true,
-      "noImplicitThis": true,
-      "noUnusedLocals": true,
-      "noUnusedParameters": true,
-      "strict": true,
-      "outDir": "./build"
-    },
-    "files": [
-      "app.ts",
-    ]
-  }
+  "compilerOptions": {
+    "noImplicitAny": true,
+    "removeComments": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "strict": true,
+    "outDir": "./dist"
+  },
+  "files": ["src/app.ts"]
+}

@@ -1,0 +1,16 @@
+{
+  "name": "typesqf",
+  "version": "1.0.0",
+  "description": "streamline sqf developement",
+  "main": "src/app.ts",
+  "scripts": {
+    "test": "test",
+    "compile": "tsc"
+  },
+  "author": "IR0NSIGHT",
+  "license": "MIT",
+  "devDependencies": {
+    "tsc": "^2.0.4",
+    "typescript": "^5.1.3"
+  }
+}
