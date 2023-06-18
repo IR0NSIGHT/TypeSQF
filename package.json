@@ -9,8 +9,16 @@
   },
   "author": "IR0NSIGHT",
   "license": "MIT",
+  "bin": {
+    "typesqf": "cli/cli_index.js"
+  },
   "devDependencies": {
     "tsc": "^2.0.4",
     "typescript": "^5.1.3"
+  },
+  "dependencies": {
+    "chalk": "^5.2.0",
+    "commander": "^11.0.0",
+    "conf": "^11.0.1"
   }
 }
