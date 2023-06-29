@@ -16,6 +16,7 @@ export const parseCliParams = (args: string[]): cliParams => {
     ".",
     "./compiled",
   ];
+ 
   argsSplit.forEach((a) => {
     //console.log(a," =>")
     switch (true) {

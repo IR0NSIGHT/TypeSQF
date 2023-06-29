@@ -74,3 +74,10 @@ export const performSplit = (
   parsedFncs.forEach(saveSqfFunctionToExecutableFile);
   return 1;
 };
+
+export type splitBlobParams = {
+  __type: "splitBlob"
+  blobfilePath: string;
+  initFlag: boolean;
+  removeFlag: boolean;
+};

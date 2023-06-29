@@ -1,7 +1,7 @@
 import { findAllSQFs, parseFunctionsFromSingleFiles } from "./parse/sqfParser";
 import { compileFileInit } from "./compile/compileSqf";
 import { writeInitFile } from "./CLI_Operations/writeInitFile";
-import { performSplit } from "./CLI_Operations/splitBlob";
+import { performSplit } from "./CLI_Operations/splitBlobOperation";
 import { genCfgFunctions } from "./CLI_Operations/buildCfgFunctionsFile";
 const helpString =
   "this program helps with preparing sqf functions.\r\n" +
