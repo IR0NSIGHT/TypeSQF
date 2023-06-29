@@ -1,5 +1,6 @@
 import { sqfFunction } from "../sqfTypes";
-import { compileFlags, indent } from "./compileSqf";
+import { compileFlags } from "./compileSqf";
+import { indent } from "./utility";
 
 const cfgClassFromFunction = (fnc: sqfFunction) => {
     let basicString = "class " + fnc.pureName + " {";
