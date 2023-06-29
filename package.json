@@ -1,24 +1,20 @@
 {
-  "name": "typesqf",
-  "version": "1.0.0",
-  "description": "streamline sqf developement",
-  "main": "src/app.ts",
+  "name": "typesqf", 
+  "version": "1.0.0", 
+  "description": "streamline sqf developement", 
+  "main": "src/app.ts", 
   "scripts": {
-    "test": "test",
+    "test_splitBlob": "rimraf ./test_data/out_functions  && mkdirp ./test_data/out_functions && node dist/index.js -s -in ./test_data/blobfile.sqf -out ./test_data/out_functions", 
     "compile": "tsc"
-  },
-  "author": "IR0NSIGHT",
-  "license": "MIT",
-  "bin": {
-    "typesqf": "cli/cli_index.js"
-  },
+  }, 
+  "author": "IR0NSIGHT", 
+  "license": "MIT", 
+  "bin": {"typesqf": "cli/cli_index.js"}, 
   "devDependencies": {
-    "tsc": "^2.0.4",
-    "typescript": "^5.1.3"
-  },
-  "dependencies": {
-    "chalk": "^5.2.0",
-    "commander": "^11.0.0",
-    "conf": "^11.0.1"
-  }
+    "mkdirp"    : "^3.0.1", 
+    "rimraf"    : "^5.0.1", 
+    "tsc"       : "^2.0.4", 
+    "typescript": "^5.1.3"  
+  }, 
+  "dependencies": {"chalk": "^5.2.0", "commander": "^11.0.0", "conf": "^11.0.1"}
 }
