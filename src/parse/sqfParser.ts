@@ -6,6 +6,22 @@ import {
 import { cfgFlags, isSqfFunction, sqfFunction } from "../sqfTypes";
 import * as fs from "fs";
 
+export const addMissingDocstrings = (
+  fncs: sqfFunction[],
+  docString?: string
+): sqfFunction[] => {
+  const docu = (
+    docString ? docString : "/*default docstring :(\r\n*/"
+  ) as string;
+  return fncs.map((fnc) => {
+    fnc = { ...fnc };
+    if (fnc.docString === "") {
+      fnc.docString = docu;
+    }
+    return fnc;
+  });
+};
+
 export const parseFunction = (fnc: string): sqfFunction | null => {
   const nameMatch = fnc.match(globalFncDef);
   if (nameMatch === null) {
@@ -27,7 +43,7 @@ export const parseFunction = (fnc: string): sqfFunction | null => {
     const match = fnc.match(starCommentsRgx);
     if (match !== null) return match[0];
     else {
-      return "/** DOCSTRING */";
+      return "";
     }
   })();
   const flags: cfgFlags = parseFunctionFlags(docString);
@@ -37,7 +53,7 @@ export const parseFunction = (fnc: string): sqfFunction | null => {
   return {
     globalName: name,
     code: body,
-    description: docString,
+    docString: docString,
     filePath: "",
     flags: flags,
     returns: "",
@@ -77,16 +93,14 @@ export const parseFunctionsFromSingleFiles = (
       return parsedFnc;
     })
     .filter(isSqfFunction);
-  return functions;
+  return addMissingDocstrings(functions);
 };
 
 export const findAllSQFs = (path: string, recurse: boolean): string[] => {
-  //console.log("collect sqf in folder:",path);
   const objs = fs.readdirSync(path).map((file) => path + "/" + file);
   const sqfs = objs.filter(
     (obj) => /.sqf$/.test(obj) && fs.statSync(obj).isFile()
   );
-  console.log(path, sqfs);
   if (recurse) {
     const subFolders = objs
       .filter((obj) => fs.statSync(obj).isDirectory())

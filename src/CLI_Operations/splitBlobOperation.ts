@@ -11,7 +11,7 @@ const sliceToFunctions = (myString: string, rgx: RegExp): string[] | null => {
 };
 
 const warnDocstringDoesntExist = (fnc: sqfFunction) => {
-  if (fnc.description === null)
+  if (fnc.docString === null)
     console.log(
       "WARNING: missing docstring at '" + fnc.globalName + "'",
       fnc.filePath
@@ -77,7 +77,7 @@ export const performSplit = (
 };
 
 export type splitBlobParams = {
-  __type: "splitBlob"
+  __type: "splitBlob";
   blobfilePath: string;
   initFlag: boolean;
   removeFlag: boolean;
@@ -85,32 +85,23 @@ export type splitBlobParams = {
 
 export const addSplitBlobAction = (program: Command) => {
   program
-  .command("split")
-  .description(
-    "Split a blobfile containing many function declarations into single-function-file executables."
-  )
-  .argument("<blobfile>", "input path of blobfile")
-  .argument("[output directory]", "directory to write function files to", ".")
-  .option("--init", "init the functions from the blobfile")
-  .option("--remove", "remove the parsed functions from the blobfile")
-  .action(
-    (
-      inPath: string,
-      targetDir: string,
-      options: { init: boolean | undefined; remove: boolean | undefined }
-    ) => {
-      //  const initFlag = options.init ? true : false;
-      const removeFlag = options.remove ? true : false;
-
-      console.log(
-        "perform split on file ",
-        inPath,
-        " towards dir ",
-        targetDir,
-        " with deletion:",
-        removeFlag
-      );
-      performSplit(inPath, targetDir, removeFlag);
-    }
-  );
-}
+    .command("split")
+    .description(
+      "Split a blobfile containing many function declarations into single-function-file executables."
+    )
+    .argument("<blobfile>", "input path of blobfile")
+    .argument("[output directory]", "directory to write function files to", ".")
+    .option("--init", "init the functions from the blobfile")
+    .option("--remove", "remove the parsed functions from the blobfile")
+    .action(
+      (
+        inPath: string,
+        targetDir: string,
+        options: { init: boolean | undefined; remove: boolean | undefined }
+      ) => {
+        //  const initFlag = options.init ? true : false;
+        const removeFlag = options.remove ? true : false;
+        performSplit(inPath, targetDir, removeFlag);
+      }
+    );
+};

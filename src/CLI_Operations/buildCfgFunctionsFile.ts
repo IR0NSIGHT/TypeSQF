@@ -18,7 +18,6 @@ export const genCfgFunctions = (
     const directory = outDir + "/functions/" + f.tag + "/";
     f.filePath = directory + "fn_" + f.pureName + ".sqf";
     mkdirp.sync(directory);
-    console.log("fnc " + f.globalName + " => " + f.filePath, f);
   });
   functions.forEach(saveSqfFunctionToCfgFile);
 };
@@ -41,14 +40,6 @@ export const addBuildCfgFunctionsAction = (program: Command) => {
       "description.ext"
     )
     .action((inRoot: string, targetDir: string, hppFilename: string) => {
-      console.log(
-        "perform compile to cfgFunctions on root ",
-        inRoot,
-        " towards dir ",
-        targetDir,
-        " with hpp filename:",
-        hppFilename
-      );
       genCfgFunctions(inRoot, targetDir, hppFilename);
     });
 };

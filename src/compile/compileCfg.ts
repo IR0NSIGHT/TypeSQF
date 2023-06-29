@@ -8,7 +8,6 @@ const cfgClassFromFunction = (fnc: sqfFunction) => {
     if (flagString !== "")
         basicString += "\r\n"+indent(flagString," ",3);
     basicString += "};\r\n";
-    console.log("flagstring:",flagString," for fnc \n", basicString);
     return basicString;
 };
 

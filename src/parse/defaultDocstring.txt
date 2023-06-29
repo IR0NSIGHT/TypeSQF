@@ -1,0 +1,16 @@
+/*
+ * Author: 
+ *
+ * Description:
+ *
+ * Arguments:
+ * 0: an argument - [<ARRAY>,<NUMBER>,<OBJECT>,<STRING>]
+ *
+ * Return Value:
+ * <NONE>
+ *
+ * Example:
+ * [[], 5] call irn_fnc_helloWorld
+ *
+ * Public: No
+ */
