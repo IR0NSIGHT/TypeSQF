@@ -3,10 +3,10 @@ import { completeFunctionRgx } from "../Regex/sqfRegex";
 import { parseFunction } from "../parse/sqfParser";
 import { sqfFunction, isSqfFunction } from "../sqfTypes";
 import { saveSqfFunctionToExecutableFile } from "../compile/compileSqf";
-const sliceToFunctions = (myString: string, rgx: RegExp) => {
+const sliceToFunctions = (myString: string, rgx: RegExp): string[] | null => {
   var fncRgx = new RegExp(rgx.source, "g");
   var functions = myString.match(fncRgx);
-  return functions;
+  return functions as string[] | null;
 };
 
 const warnDocstringDoesntExist = (fnc: sqfFunction) => {
@@ -38,12 +38,7 @@ export const performSplit = (
     return "";
   }
   const allFileContents = fs.readFileSync(inPath, "utf-8");
-  const functionBlobs = sliceToFunctions(allFileContents, completeFunctionRgx);
-  if (functionBlobs === null) {
-    //FIXME whats this for??
-    console.log("nothing to do, abort");
-    return "";
-  }
+
   //remove parsed functions from blobfile
   if (ddelete) {
     console.log("overwrite input file after deletion:", inPath);
@@ -62,6 +57,12 @@ export const performSplit = (
     });
   }
 
+  const functionBlobs = sliceToFunctions(allFileContents, completeFunctionRgx);
+  if (functionBlobs === null) {
+    //fail early if no functions were found by the matcher
+    console.log("no function declarations were found in blobfile, abort");
+    return "";
+  }
   //handle the extracted strings
   const parsedFncs = functionBlobs.map(parseFunction).filter(isSqfFunction);
   parsedFncs.forEach(warnDocstringDoesntExist);
