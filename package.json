@@ -13,6 +13,8 @@
     "typesqf": "cli/cli_index.js"
   },
   "devDependencies": {
+    "mkdirp": "^3.0.1",
+    "rimraf": "^5.0.1",
     "tsc": "^2.0.4",
     "typescript": "^5.1.6"
   },
