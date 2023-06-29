@@ -22,16 +22,6 @@ if (!valid.valid) {
   console.log("ERROR:", valid.errors.join("\r\n"));
   console.log(helpString);
 } else {
-  if (params.cfgFunctions) {
-    console.log(
-      "generate cfgFunctions for ",
-      params.pathIn,
-      " in ",
-      params.pathOut
-    );
-    genCfgFunctions(params.pathIn, params.pathOut, "description.ext");
-  }
-
   if (params.executable) {
     const missionRoot = params.pathIn;
     //expects folder structure such as: . -> functions -> irn_fnc_owo.sqf

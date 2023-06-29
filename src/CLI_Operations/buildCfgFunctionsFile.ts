@@ -1,4 +1,3 @@
-import { program } from "commander";
 import { cfgFunctions } from "../compile/compileCfg";
 import { findAllSQFs, parseFunctionsFromSingleFiles } from "../parse/sqfParser";
 import { writeInitFile } from "./writeInitFile";
