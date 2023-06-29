@@ -66,7 +66,7 @@ export function compileSqfFunction(fnc: sqfFunction, type: codeType): string {
     case "cfg":
       return fnc.code;
     case "sqf":
-      return fnc.globalName + " = {\r\n" + indent(fnc.code, "", 3) + "};\r\n";
+      return fnc.globalName + " = {\r\n" + indent(fnc.code, " ", 4) + "};\r\n";
     default:
       throw new Error("invalid compile type");
   }

@@ -1,6 +1,5 @@
 irn_fnc_helloWorld = {
     diag_log "owo";
-    // FIXME doesnt properly indent the code
     if (true) then {
         owo;
     } else {
@@ -12,6 +11,7 @@ irn_fnc_helloWorld = {
 this is documentation for doSomething
 */
 irn_fnc_doSomething = {
+    // fixme doesnt carry over documentation
     _m = "this is a string";
     systemChat _m;
 };

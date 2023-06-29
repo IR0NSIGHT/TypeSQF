@@ -40,10 +40,11 @@ export const performSplit = (
   const allFileContents = fs.readFileSync(inPath, "utf-8");
   const functionBlobs = sliceToFunctions(allFileContents, completeFunctionRgx);
   if (functionBlobs === null) {
+    //FIXME whats this for??
     console.log("nothing to do, abort");
     return "";
   }
-  //complain about missing documentation
+  //remove parsed functions from blobfile
   if (ddelete) {
     console.log("overwrite input file after deletion:", inPath);
     const lenghtOrg = allFileContents.length;
