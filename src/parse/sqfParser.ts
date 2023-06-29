@@ -31,7 +31,7 @@ export const parseFunction = (fnc: string): sqfFunction | null => {
     }
   })();
   const flags: cfgFlags = parseFunctionFlags(docString);
-  const pureName = name.replace(".*fnc_", "");
+  const pureName = name.replace(/.*fnc_/, "");
   const tag = name.replace(/_fnc.*/, "");
   const cat = null; //TODO read from somewhere, ideally folder structure
   return {

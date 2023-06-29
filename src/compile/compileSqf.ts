@@ -83,6 +83,16 @@ export const saveSqfFunctionToExecutableFile = (fnc: sqfFunction): void => {
 };
 
 /**
+ * save sqf function into a single file thats executable:
+ * writes compiled exectuable sqf string into filepath
+ */
+export const saveSqfFunctionToCfgFile = (fnc: sqfFunction): void => {
+  if (fnc.filePath !== null)
+    writeFile(compileSqfFunction(fnc, "cfg"), fnc.filePath);
+  else console.warn("can not write to file for function", fnc);
+};
+
+/**
  * compile flags into writable code to export into files.
  * @param flags
  * @param type

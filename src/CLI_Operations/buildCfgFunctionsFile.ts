@@ -1,7 +1,9 @@
 import { cfgFunctions } from "../compile/compileCfg";
+import { saveSqfFunctionToCfgFile } from "../compile/compileSqf";
 import { findAllSQFs, parseFunctionsFromSingleFiles } from "../parse/sqfParser";
 import { writeInitFile } from "./writeInitFile";
 import { Command } from "commander";
+import { mkdirp } from "mkdirp";
 
 export const genCfgFunctions = (
   inPath: string,
@@ -11,6 +13,14 @@ export const genCfgFunctions = (
   const functions = parseFunctionsFromSingleFiles(findAllSQFs(inPath, true));
   const cfgString = cfgFunctions(functions);
   writeInitFile(cfgString, outDir, fileName);
+  //compile functions themselves
+  functions.forEach((f) => {
+    const directory = outDir + "/functions/" + f.tag + "/";
+    f.filePath = directory + "fn_" + f.pureName + ".sqf";
+    mkdirp.sync(directory);
+    console.log("fnc " + f.globalName + " => " + f.filePath, f);
+  });
+  functions.forEach(saveSqfFunctionToCfgFile);
 };
 
 export const addBuildCfgFunctionsAction = (program: Command) => {
