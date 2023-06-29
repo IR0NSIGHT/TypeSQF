@@ -22,18 +22,6 @@ if (!valid.valid) {
   console.log("ERROR:", valid.errors.join("\r\n"));
   console.log(helpString);
 } else {
-  if (params.split) {
-    console.log(
-      "perform split on file ",
-      params.pathIn,
-      " towards dir ",
-      params.pathOut,
-      " with deletion:",
-      params.ddelete
-    );
-    performSplit(params.pathIn, params.pathOut, params.ddelete);
-  }
-
   if (params.cfgFunctions) {
     console.log(
       "generate cfgFunctions for ",

@@ -9,5 +9,5 @@
     "strict": true,
     "outDir": "./dist"
   },
-  "files": ["src/cli/cli_index.ts"]
+  "files": ["src/cli_index.ts"]
 }
