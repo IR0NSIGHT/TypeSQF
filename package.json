@@ -1,24 +1,32 @@
 {
-  "name": "typesqf", 
-  "version": "1.0.0", 
-  "description": "streamline sqf developement", 
-  "main": "src/app.ts", 
+  "name": "typesqf",
+  "version": "1.0.0",
+  "description": "streamline sqf developement",
+  "main": "src/app.ts",
   "scripts": {
-    "clean_testbed": "rimraf ./test_data/out/ && mkdirp ./test_data/out/functions", 
-    "test_split": "node dist/cli_index.js  split test_data/blobfile.sqf test_data/out/functions/ --init", 
-    "test_cfg": "node dist/cli_index.js cfg test_data/out/functions/ test_data/out/cfg", 
-    "test": "npm run clean_testbed && npm run test_split && npm run test_cfg", 
+    "clean_testbed": "rimraf ./test_data/out/ && mkdirp ./test_data/out/functions",
+    "test_split": "node dist/cli_index.js  split test_data/blobfile.sqf test_data/out/functions/ --init",
+    "test_cfg": "node dist/cli_index.js cfg test_data/out/functions/ test_data/out/cfg",
+    "test": "npm run clean_testbed && npm run test_split && npm run test_cfg",
     "compile": "tsc"
-  }, 
-  "author": "IR0NSIGHT", 
-  "license": "MIT", 
-  "bin": {"typesqf": "dist/cli_index.js"}, 
+  },
+  "author": "IR0NSIGHT",
+  "license": "MIT",
+  "bin": {
+    "typesqf": "dist/cli_index.js"
+  },
   "devDependencies": {
-    "jest"      : "^29.5.0", 
-    "mkdirp"    : "^3.0.1" , 
-    "rimraf"    : "^5.0.1" , 
-    "tsc"       : "^2.0.4" , 
-    "typescript": "^5.1.6"   
-  }, 
-  "dependencies": {"@types/node": "^20.3.2", "commander": "^11.0.0"}
+    "@babel/preset-typescript": "^7.22.5",
+    "@types/jest": "^29.5.2",
+    "jest": "^29.5.0",
+    "mkdirp": "^3.0.1",
+    "rimraf": "^5.0.1",
+    "ts-jest": "^29.1.1",
+    "tsc": "^2.0.4",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@types/node": "^20.3.2",
+    "commander": "^11.0.0"
+  }
 }

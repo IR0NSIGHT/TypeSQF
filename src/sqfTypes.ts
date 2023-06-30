@@ -3,10 +3,8 @@ export type sqfFunction = {
   filePath: string | null;
   docString: string | null;
   flags: cfgFlags;
-  returns: string;
   code: string;
   tag: string;
-  category: string | null;
   pureName: string;
 };
 
@@ -21,7 +19,7 @@ export function hasFilePath(fnc: sqfFunction): boolean {
   return fnc.filePath !== null;
 }
 
-export type codeType = "cfg" | "sqf" | "doc";
+export type compileTarget = "cfg" | "sqf" | "doc";
 
 export function isSqfFunction(fnc: sqfFunction | null): fnc is sqfFunction {
   return fnc !== null;

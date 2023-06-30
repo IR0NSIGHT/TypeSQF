@@ -1,4 +1,4 @@
-import { cfgFlags, codeType, sqfFunction } from "../sqfTypes";
+import { cfgFlags, compileTarget, sqfFunction } from "../sqfTypes";
 import { writeFile } from "./writeFile";
 import { indent } from "./utility";
 
@@ -61,7 +61,10 @@ export const compileFileInit = (functions: sqfFunction[]): string => {
  * @param type
  * @returns
  */
-export function compileSqfFunction(fnc: sqfFunction, type: codeType): string {
+export function compileSqfFunction(
+  fnc: sqfFunction,
+  type: compileTarget
+): string {
   switch (type) {
     case "cfg":
       return fnc.code;
@@ -100,21 +103,21 @@ export const saveSqfFunctionToCfgFile = (fnc: sqfFunction): void => {
  */
 export const compileFlags = (
   flags: cfgFlags,
-  type: codeType = "sqf"
+  type: compileTarget = "sqf"
 ): string => {
   let out = "";
   switch (type) {
     case "cfg": {
       if (flags.preInit) out += "preInit = 1;\r\n";
       if (flags.postInit) out += "postInit = 1;\r\n";
-      if (flags.preStart) out += "pospreStarttInit = 1;\r\n";
+      if (flags.preStart) out += "preStart = 1;\r\n";
       if (flags.recompile) out += "recompile = 1;\r\n";
       break;
     }
     case "doc": {
       if (flags.preInit) out += "@preInit\r\n";
       if (flags.postInit) out += "@postInit\r\n";
-      if (flags.preStart) out += "@pospreStarttInit\r\n";
+      if (flags.preStart) out += "@preStart\r\n";
       if (flags.recompile) out += "@recompile \r\n";
       break;
     }
