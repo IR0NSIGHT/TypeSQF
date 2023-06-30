@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 import { Command } from "commander";
 import { addSplitBlobAction } from "./CLI_Operations/splitBlobOperation";
 import { addBuildCfgFunctionsAction } from "./CLI_Operations/buildCfgFunctionsFile";
