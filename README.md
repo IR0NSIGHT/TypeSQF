@@ -71,9 +71,20 @@ diag_log "Hello World";
 
 ## Usage
 
+clone the repo  
+install node.js from the internet  
+navigate into the repository in bash  
+globally install the module:
+
 ```bash
-$ node dist/cli_index.js
-Usage: tqf [options] [command]
+npm i -g # globally installs this npm module
+```
+
+module is now available as "typesqf":
+
+```bash
+$ typesqf
+Usage: typesqf [options] [command]
 
 sqf-CLI for streamlining sqf developement
 

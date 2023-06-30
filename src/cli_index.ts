@@ -5,7 +5,7 @@ import { addWriteInitAction } from "./CLI_Operations/writeInitFile";
 const program = new Command();
 
 program
-  .name("tqf")
+  .name("typesqf")
   .description("sqf-CLI for streamlining sqf developement")
   .version("1.0.0");
 
