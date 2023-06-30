@@ -3,37 +3,37 @@ import { compileFlags } from "./compileSqf";
 import { indent } from "./utility";
 
 const cfgClassFromFunction = (fnc: sqfFunction) => {
-    let basicString = "class " + fnc.pureName + " {";
-    const flagString = compileFlags(fnc.flags,"cfg");
-    if (flagString !== "")
-        basicString += "\r\n"+indent(flagString," ",3);
-    basicString += "};\r\n";
-    return basicString;
+  const lines = ["class " + fnc.pureName + " {"];
+  const flagString = compileFlags(fnc.flags, "cfg");
+  if (flagString !== "") lines.push(indent(flagString, " ", 3));
+  lines.push("};");
+  return lines.join("\r\n");
 };
 
 const cfgClassFromTag = (tag: string, fncs: sqfFunction[]) => {
-    let cfgTag = "class " + tag + " {\r\n";
-    fncs.forEach(f => cfgTag += indent(cfgClassFromFunction(f)," ",3))
-    cfgTag += "};//"+tag+"\r\n";
-    return cfgTag;
-}
+  const lines = [];
+  lines.push("class " + tag + " {");
+  fncs.forEach((f) => lines.push(indent(cfgClassFromFunction(f), " ", 3)));
+  lines.push("};//" + tag);
+  return lines.join("\r\n");
+};
 
-const collectTags = (fncs: sqfFunction[]): Map<string,sqfFunction[]> => {
-    const tags = new Map<string,sqfFunction[]>();
-    fncs.forEach(f => {
-        let list: sqfFunction[] = tags.get(f.tag)??[];
-        list.push(f);
-        tags.set(f.tag,list);
-    })
-    return tags;
-}
+const collectTags = (fncs: sqfFunction[]): Map<string, sqfFunction[]> => {
+  const tags = new Map<string, sqfFunction[]>();
+  fncs.forEach((f) => {
+    let list: sqfFunction[] = tags.get(f.tag) ?? [];
+    list.push(f);
+    tags.set(f.tag, list);
+  });
+  return tags;
+};
 
 export const cfgFunctions = (functions: sqfFunction[]): string => {
-    const tagMap = collectTags(functions);
-    let cfgCode = "//autogen cfgFunctions\r\nclass CfgFunctions {\r\n";
-    tagMap.forEach((fncs, tag) => {
-        cfgCode += indent(cfgClassFromTag(tag, fncs)," ",3);
-    })
-    cfgCode +="};//cfgFunctions\r\n"
-    return cfgCode;
+  const tagMap = collectTags(functions);
+  const cfgLines = ["//autogen cfgFunctions", "class CfgFunctions {"];
+  tagMap.forEach((fncs, tag) => {
+    cfgLines.push(indent(cfgClassFromTag(tag, fncs), " ", 3));
+  });
+  cfgLines.push("};//cfgFunctions");
+  return cfgLines.join("\r\n");
 };
