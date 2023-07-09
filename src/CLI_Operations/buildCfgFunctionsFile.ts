@@ -1,6 +1,6 @@
 import { cfgFunctions } from "../compile/compileCfg";
 import { saveSqfFunctionToCfgFile } from "../compile/compileSqf";
-import { findAllSQFs, parseFunctionsFromSingleFiles } from "../parse/sqfParser";
+import { findAllsqfFiles, parseFunctionsFromSingleFiles } from "../parse/sqfParser";
 import { writeInitFile } from "./writeInitFile";
 import { Command } from "commander";
 import { mkdirp } from "mkdirp";
@@ -10,7 +10,8 @@ export const genCfgFunctions = (
   outDir: string,
   fileName: string
 ) => {
-  const functions = parseFunctionsFromSingleFiles(findAllSQFs(inPath, true));
+  const functionStrings = findAllsqfFiles(inPath);
+  const functions = parseFunctionsFromSingleFiles(functionStrings);
   const cfgString = cfgFunctions(functions);
   writeInitFile(cfgString, outDir, fileName);
   //compile functions themselves

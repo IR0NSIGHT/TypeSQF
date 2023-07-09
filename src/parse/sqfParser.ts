@@ -5,7 +5,7 @@ import {
 } from "../Regex/sqfRegex";
 import { cfgFlags, isSqfFunction, sqfFunction } from "../sqfTypes";
 import * as fs from "fs";
-
+import { globSync } from 'glob'
 export const addMissingDocstrings = (
   fncs: sqfFunction[],
   docString?: string
@@ -93,21 +93,12 @@ export const parseFunctionsFromSingleFiles = (
   return addMissingDocstrings(functions);
 };
 
-export const findAllSQFs = (path: string, recurse: boolean): string[] => {
-  const objs = fs.readdirSync(path).map((file) => path + "/" + file);
-  const sqfs = objs.filter(
-    (obj) => /.sqf$/.test(obj) && fs.statSync(obj).isFile()
-  );
-  if (recurse) {
-    const subFolders = objs
-      .filter((obj) => fs.statSync(obj).isDirectory())
-      .map((folder) => {
-        return { name: folder, path: path + "/" + folder };
-      });
-    const subSQF = subFolders.flatMap((f) =>
-      findAllSQFs(f.path, true).map((sqf) => f.name + "/" + sqf)
-    );
-    return sqfs.concat(subSQF);
-  }
-  return sqfs;
+/**
+ * collect all filepaths starting with dirPath that end in .sqf
+ * @param dirPath 
+ * @returns string array of paths from dirPath (including dirPath)
+ */
+export const findAllsqfFiles = (dirPath: string): string[] => {
+  const allSqfFiles = globSync(dirPath+'/**/*.sqf')
+  return allSqfFiles;
 };

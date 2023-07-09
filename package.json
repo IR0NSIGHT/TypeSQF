@@ -6,7 +6,7 @@
   "scripts": {
     "clean_testbed": "rimraf ./test_data/out/ && mkdirp ./test_data/out/functions",
     "test_split": "node dist/cli_index.js  split test_data/blobfile.sqf test_data/out/functions/ --init",
-    "test_cfg": "node dist/cli_index.js cfg test_data/out/functions/ test_data/out/cfg",
+    "test_cfg": "node dist/cli_index.js cfg test_data/hello test_data/out/cfg",
     "test": "npm run clean_testbed && npm run test_split && npm run test_cfg",
     "compile": "tsc"
   },

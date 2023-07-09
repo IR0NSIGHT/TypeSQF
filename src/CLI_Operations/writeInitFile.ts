@@ -2,7 +2,7 @@ import { Command } from "commander";
 import { writeFile } from "../compile/writeFile";
 import * as fs from "fs";
 import { compileFileInit } from "../compile/compileSqf";
-import { findAllSQFs, parseFunctionsFromSingleFiles } from "../parse/sqfParser";
+import { findAllsqfFiles, parseFunctionsFromSingleFiles } from "../parse/sqfParser";
 
 export const writeInitFile = (code: string, dir: string, fileName: string) => {
   if (!fs.existsSync(dir)) {
@@ -24,7 +24,7 @@ export const addWriteInitAction = (program: Command) => {
     .action((inPath: string, targetDir: string, fileName: string) => {
       const missionRoot = inPath;
       //expects folder structure such as: . -> functions -> irn_fnc_owo.sqf
-      const files = findAllSQFs(missionRoot, true).filter((f: string) =>
+      const files = findAllsqfFiles(missionRoot).filter((f: string) =>
         /fnc/.test(f)
       );
       const functions = parseFunctionsFromSingleFiles(files);
