@@ -7,7 +7,7 @@
     "clean_testbed": "rimraf ./test_data/out/ && mkdirp ./test_data/out",
     "test_split": "node dist/cli_index.js split test_data/input/blobfile.sqf test_data/out/split/functions/ --init",
     "test_cfg": "node dist/cli_index.js cfg test_data/input/hello test_data/out/cfg",
-    "e2e": "npm run clean_testbed && npm run test_split && npm run test_cfg",
+    "e2e": "npm run compile && npm run clean_testbed && npm run test_split && npm run test_cfg",
     "test": "jest",
     "compile": "tsc"
   },
