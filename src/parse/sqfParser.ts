@@ -74,12 +74,19 @@ export const parseFunctionFlags = (docString: string): cfgFlags => {
   return flags;
 };
 
+export const readFileAsCRLF = (filePath: string): string => {
+  const outString = fs.readFileSync(filePath, "utf-8")
+  .replace(new RegExp("\r\n","g"),"\n") //crlf to LF
+  .replace(new RegExp("\n","g"),"\r\n") //lf to crlf
+  return outString
+}
+
 export const parseFunctionsFromSingleFiles = (
   filePaths: string[]
 ): sqfFunction[] => {
   const functions: sqfFunction[] = filePaths
     .map((file): sqfFunction | null => {
-      const parsedFnc = parseFunction(fs.readFileSync(file, "utf-8"));
+      const parsedFnc = parseFunction(readFileAsCRLF(file));
       if (parsedFnc !== null) {
         parsedFnc.filePath = file;
       } else {
@@ -99,6 +106,6 @@ export const parseFunctionsFromSingleFiles = (
  * @returns string array of paths from dirPath (including dirPath)
  */
 export const findAllsqfFiles = (dirPath: string): string[] => {
-  const allSqfFiles = globSync(dirPath+'/**/*.sqf')
+  const allSqfFiles = globSync(dirPath + '/**/*.sqf')
   return allSqfFiles;
 };
