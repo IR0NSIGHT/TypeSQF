@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { completeFunctionRgx } from "../Regex/sqfRegex";
-import { parseFunction, readFileAsCRLF } from "../parse/sqfParser";
+import { parseFunction, readFile } from "../parse/sqfParser";
 import { sqfFunction, isSqfFunction } from "../sqfTypes";
 import { saveSqfFunctionToExecutableFile } from "../compile/compileSqf";
 import { Command } from "commander";
@@ -38,7 +38,7 @@ export const performSplit = (
     runtimeErr("input file is not a file:\t'" + inPath + "'\t.", "split");
     return "";
   }
-  const allFileContents = readFileAsCRLF(inPath)
+  const allFileContents = readFile(inPath)
 
   //remove parsed functions from blobfile
   if (ddelete) {

@@ -1,8 +1,10 @@
 import {
   functionBodyRgx,
+  globalDef,
   globalFncDef,
   starCommentsRgx,
 } from "../Regex/sqfRegex";
+import { extractScope } from "./scopeParser"
 import { cfgFlags, isSqfFunction, sqfFunction } from "../sqfTypes";
 import * as fs from "fs";
 import { globSync } from 'glob'
@@ -23,21 +25,28 @@ export const addMissingDocstrings = (
 };
 
 export const parseFunction = (fnc: string): sqfFunction | null => {
+  fnc = unifyLinebreaks(fnc);
+  fnc = removeLinebreaks(fnc);
   const nameMatch = fnc.match(globalFncDef);
   if (nameMatch === null) {
-    console.error("no name match");
+    console.error("no name match:", JSON.stringify(fnc), " for regex: ", JSON.stringify(globalFncDef));
     return null;
   }
-  const name = nameMatch[0].replace(/ *= *{/, "").replace("\r\n", "");
-  const bodyMatch = fnc.match(functionBodyRgx);
-  if (bodyMatch === null) {
-    console.error("no body match");
+  const name = nameMatch[0].replace(globalDef, "")
+
+  //find the beginnign of the function scope
+  const rgx = new RegExp(globalFncDef.source, "g")
+  rgx.test(fnc)
+  console.log("last idx: " + rgx.lastIndex)
+  const reducedFnc = fnc.substring(rgx.lastIndex - 1)
+
+  const scope = extractScope(reducedFnc)
+  console.log("scope parsed:", scope)
+  if (scope.scope === -1) {
+    console.error("no body match:", JSON.stringify(fnc), " for regex: ", JSON.stringify(functionBodyRgx));
     return null;
   }
-  const body = bodyMatch[0]
-    .replace(globalFncDef, "")
-    .replace("\r\n};", "")
-    .replace(/\r\n  ? ? ?/g, "\r\n");
+  const body = scope.scope.substring(1,scope.scope.length -1)
 
   const docString = (() => {
     const match = fnc.match(starCommentsRgx);
@@ -74,11 +83,23 @@ export const parseFunctionFlags = (docString: string): cfgFlags => {
   return flags;
 };
 
-export const readFileAsCRLF = (filePath: string): string => {
+export const readFile = (filePath: string): string => {
   const outString = fs.readFileSync(filePath, "utf-8")
-  .replace(new RegExp("\r\n","g"),"\n") //crlf to LF
-  .replace(new RegExp("\n","g"),"\r\n") //lf to crlf
   return outString
+}
+
+/**
+ * unifies linebreaks
+ * @param input 
+ * @returns 
+ */
+const unifyLinebreaks = (input: string): string => {
+  return input.replace(new RegExp("\r\n", "g"), "\n") //crlf to LF
+    .replace(new RegExp("\n", "g"), "\r\n") //lf to crlf
+}
+
+const removeLinebreaks = (input: string): string => {
+  return input.replace(new RegExp("[\r\n]+"), "")
 }
 
 export const parseFunctionsFromSingleFiles = (
@@ -86,7 +107,7 @@ export const parseFunctionsFromSingleFiles = (
 ): sqfFunction[] => {
   const functions: sqfFunction[] = filePaths
     .map((file): sqfFunction | null => {
-      const parsedFnc = parseFunction(readFileAsCRLF(file));
+      const parsedFnc = parseFunction(readFile(file));
       if (parsedFnc !== null) {
         parsedFnc.filePath = file;
       } else {

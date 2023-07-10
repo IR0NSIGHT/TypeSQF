@@ -1,6 +1,7 @@
-export const globalFunctionsRgx = /( |(\r\n)|^)([A-Za-z]+_)*(^fnc_|fnc_)\w+/; 
+export const globalFunctionsRgx = /( |(\r\n)|^)([a-zA-Z]\w*)?fnc_\w+/; 
 
-export const globalFncDef = new RegExp(globalFunctionsRgx.source +" += +{");
+export const globalDef = /[ \r\n]*=[ \r\n]*{/
+export const globalFncDef = new RegExp(globalFunctionsRgx.source + globalDef.source);
 
 export const starCommentsRgx = new RegExp(/((\/\*.*)((\r\n)? *\*([^\/].*)?)*(\r\n)? *\*\/)|(\/\/.*)/);
 
