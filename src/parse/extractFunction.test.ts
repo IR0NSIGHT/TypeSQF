@@ -53,7 +53,7 @@ describe("extractAllFunctionsFrom from string", () => {
         const fnc_b = parsed.functions[1]
         expect(fnc_a.globalName).toBe("fnc_a")
         expect(fnc_b.globalName).toBe("fnc_b")
-        expect(parsed.remaining).toBe("xx;;xx")
+        expect(parsed.remaining).toBe("xx;xx")
     })
 
     test("reads many complicated", () => {
@@ -80,5 +80,18 @@ describe("extractAllFunctionsFrom from string", () => {
         const fnc_b = parsed.functions[1]
         expect(fnc_a.globalName).toBe("irn_fnc_helloWorld")
         expect(fnc_b.globalName).toBe("irn_fnc_doSomething")
+    })
+
+    test("removes many functions from input proper:",()=>{
+        const fncString =
+            "_start = '';\n"+
+            "fnc_a1 = {\ndiag_log[]; _owo={};};\n" +
+            "fnc_a2 = {\ndiag_log[]; _owo={};};\n" +
+            "fnc_a3 = {\ndiag_log[]; _owo={};};\n" +
+            "fnc_a4 = {\ndiag_log[]; _owo={};};\n" +
+            "_end = '';"
+        const parsed = extractAllFunctionsFrom(fncString);
+        expect(parsed.functions.length).toBe(4)
+        expect(parsed.remaining).toBe( "_start = '';\n"+ "_end = '';")
     })
 })

@@ -21,13 +21,16 @@ export const addMissingDocstrings = (
 
 
 export const cleanStringForParsing = (input: string): string => {
-    input = unifyLinebreaks(input).trim()
+    input = unifyLinebreaks(input)
     input = " " + input + " "   //pad
     return input
 }
 
 export const cleanStringAfterParsing = (input: string): string => {
-    return input.substring(1, input.length - 1) //remove space padding at end and start
+    const out = input.substring(1, input.length - 1)
+        .replace(new RegExp(" \n ","g"),"\n")
+        .replace(new RegExp(/;(( |\n)*;)+/,"g"),";") //remove space padding at end and start
+    return  out;
 }
 
 export const parseFunctionFlags = (docString: string): cfgFlags => {
@@ -56,7 +59,7 @@ export const readFile = (filePath: string): string => {
  */
 const unifyLinebreaks = (input: string): string => {
     return input.replace(new RegExp("\r\n", "g"), "\n") //crlf to LF
-        .replace(new RegExp("\n", "g"), " \r\n ") //lf to crlf
+       .replace(new RegExp("\n", "g"), " \n ") //lf to crlf
 }
 
 export const parseFunctionsFromSingleFiles = (

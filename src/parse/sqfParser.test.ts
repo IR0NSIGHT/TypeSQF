@@ -18,7 +18,5 @@ describe("parse sqf files",()=> {
         expect(functions.length).toBe(1)
         expect(functions[0].globalName).toBe("irn_fnc_crlfFunction")
     })
-
-
 })
 
