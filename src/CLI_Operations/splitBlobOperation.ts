@@ -1,15 +1,9 @@
 import * as fs from "fs";
-import { completeFunctionRgx } from "../Regex/sqfRegex";
-import { parseFunctionsFromString, readFile } from "../parse/sqfParser";
-import { sqfFunction, isSqfFunction } from "../sqfTypes";
+import { extractFunctionsFromString, readFile } from "../parse/sqfParser";
+import { sqfFunction } from "../sqfTypes";
 import { saveSqfFunctionToExecutableFile } from "../compile/compileSqf";
 import { Command } from "commander";
-const sliceToFunctions = (myString: string, rgx: RegExp): string[] | null => {
-  var fncRgx = new RegExp(rgx.source, "g");
-  var functions = myString.match(fncRgx);
-  return functions as string[] | null;
-};
-
+import {mkdirp} from "mkdirp";
 const warnDocstringDoesntExist = (fnc: sqfFunction) => {
   if (fnc.docString === null)
     console.log(
@@ -26,13 +20,13 @@ const runtimeErr = (mssg: string, operation: string) => {
  * read a blob file and split it into a working directory of single-file-functions
  * @param inPath
  * @param outDir
- * @param ddelete
+ * @param deleteAfterExtraction
  * @returns
  */
 export const performSplit = (
   inPath: string,
   outDir: string,
-  ddelete: boolean
+  deleteAfterExtraction: boolean
 ) => {
   if (!fs.lstatSync(inPath).isFile()) {
     runtimeErr("input file is not a file:\t'" + inPath + "'\t.", "split");
@@ -40,38 +34,31 @@ export const performSplit = (
   }
   const allFileContents = readFile(inPath)
 
+  const { functions, remaining} = extractFunctionsFromString(allFileContents);
+
   //remove parsed functions from blobfile
-  if (ddelete) {
+  if (deleteAfterExtraction) {
     console.log("overwrite input file after deletion:", inPath);
-    const lenghtOrg = allFileContents.length;
-    const code = allFileContents.replace(
-      new RegExp(completeFunctionRgx.source, "g"),
-      ""
-    );
-    const lengthNow = code.length;
-    console.log("removed ", lenghtOrg - lengthNow, " characters.");
-    fs.writeFile(inPath, code, (err) => {
+    const lengthBefore = allFileContents.length;
+    const lengthNow = remaining.length;
+
+    console.log("removed ", lengthBefore - lengthNow, " characters.");
+    fs.writeFile(inPath, remaining, (err) => {
       if (err) {
         console.error(err);
       }
-      // file written successfully
     });
   }
 
-  const functionBlobs = sliceToFunctions(allFileContents, completeFunctionRgx);
-  if (functionBlobs === null) {
-    //fail early if no functions were found by the matcher
-    console.log("no function declarations were found in blobfile, abort");
-    return "";
-  }
   //handle the extracted strings
-  const parsedFncs = functionBlobs.map(parseFunctionsFromString).filter(isSqfFunction);
+  const parsedFncs = functions
   parsedFncs.forEach(warnDocstringDoesntExist);
 
   //fncs dont have filepath bc they originate from a blob file
   parsedFncs.forEach((fnc) => {
     fnc.filePath = outDir + "/" + fnc.globalName + ".sqf";
   });
+  mkdirp.sync(outDir)
   parsedFncs.forEach(saveSqfFunctionToExecutableFile);
   return 1;
 };

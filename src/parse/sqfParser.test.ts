@@ -1,4 +1,4 @@
-import { extractFunction, parseFunctionsFromString, parseFunctionsFromSingleFiles} from "./sqfParser"
+import { extractFunction, extractFunctionsFromString, parseFunctionsFromSingleFiles} from "./sqfParser"
 
 describe("parse sqf files",()=> {
     test("read an LF sqf single-function-exectuable",()=>{
@@ -19,25 +19,32 @@ describe("parse sqf files",()=> {
 
     test("can read function that isnt perfectly formatted",()=>{
         const fncString = "irn_fnc_owo={diag_log['unga bunga'];}   \r\n"
-        const fncObj = parseFunctionsFromString(fncString);
+        const parsed = extractFunctionsFromString(fncString);
+        expect(parsed.functions.length).toBe(1)
+        const fncObj = parsed.functions[0]
         expect(fncObj?.globalName).toBe("irn_fnc_owo")
     })
 
     test("does not read local function",()=>{
         const fncString = "_irn_fnc_owo={diag_log['unga bunga'];}   \r\n"
-        const fncObj = parseFunctionsFromString(fncString);
-        expect(fncObj).toBeNull()
+        const parsed = extractFunctionsFromString(fncString);
+        expect(parsed.functions.length).toBe(0)
+        expect(parsed.remaining).toBe(fncString)
     })
 
     test("reads function thats in the middle of string",()=>{
         const fncString = "hello_world; irn_fnc_owo={diag_log['unga bunga'];} hello_world   \r\n"
-        const fncObj = parseFunctionsFromString(fncString);
+        const parsed = extractFunctionsFromString(fncString);
+        expect(parsed.functions.length).toBe(1)
+        const fncObj = parsed.functions[0]
         expect(fncObj?.globalName).toBe("irn_fnc_owo")
     })
 
     test("reads unconventional function name",()=>{
         const fncString = "hello_world; fnHelloWorld1234={diag_log['unga bunga'];} hello_world   \r\n"
-        const fncObj = parseFunctionsFromString(fncString);
+        const parsed = extractFunctionsFromString(fncString);
+        expect(parsed.functions.length).toBe(1)
+        const fncObj = parsed.functions[0]
         expect(fncObj?.globalName).toBe("fnHelloWorld1234")
     })
 })
