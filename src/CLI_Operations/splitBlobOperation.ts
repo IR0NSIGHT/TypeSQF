@@ -1,6 +1,6 @@
 import * as fs from "fs";
 import { completeFunctionRgx } from "../Regex/sqfRegex";
-import { parseFunction, readFile } from "../parse/sqfParser";
+import { parseFunctionsFromString, readFile } from "../parse/sqfParser";
 import { sqfFunction, isSqfFunction } from "../sqfTypes";
 import { saveSqfFunctionToExecutableFile } from "../compile/compileSqf";
 import { Command } from "commander";
@@ -65,7 +65,7 @@ export const performSplit = (
     return "";
   }
   //handle the extracted strings
-  const parsedFncs = functionBlobs.map(parseFunction).filter(isSqfFunction);
+  const parsedFncs = functionBlobs.map(parseFunctionsFromString).filter(isSqfFunction);
   parsedFncs.forEach(warnDocstringDoesntExist);
 
   //fncs dont have filepath bc they originate from a blob file
