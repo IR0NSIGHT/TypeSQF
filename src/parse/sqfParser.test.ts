@@ -23,6 +23,23 @@ describe("parse sqf files",()=> {
         expect(fncObj?.globalName).toBe("irn_fnc_owo")
     })
 
+    test("does not read local function",()=>{
+        const fncString = "_irn_fnc_owo={diag_log['unga bunga'];}   \r\n"
+        const fncObj = parseFunctionsFromString(fncString);
+        expect(fncObj).toBeNull()
+    })
+
+    test("reads function thats in the middle of string",()=>{
+        const fncString = "hello_world; irn_fnc_owo={diag_log['unga bunga'];} hello_world   \r\n"
+        const fncObj = parseFunctionsFromString(fncString);
+        expect(fncObj?.globalName).toBe("irn_fnc_owo")
+    })
+
+    test("reads unconventional function name",()=>{
+        const fncString = "hello_world; fnHelloWorld1234={diag_log['unga bunga'];} hello_world   \r\n"
+        const fncObj = parseFunctionsFromString(fncString);
+        expect(fncObj?.globalName).toBe("fnHelloWorld1234")
+    })
 })
 
 describe("extract function from string", () => {
@@ -32,6 +49,6 @@ describe("extract function from string", () => {
         expect(fncObj).not.toBeUndefined()
         expect(fncObj!.name).toBe("irn_fnc_owo")
         expect(fncObj!.body).toBe("diag_log['unga bunga'];")
-        expect(fncObj!.remaining).toBe("hello world 1; ; hello world 2;")
+        expect(fncObj!.remaining).toBe("hello world 1;; hello world 2;")
     })
 })

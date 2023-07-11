@@ -1,7 +1,3 @@
-import {
-  functionBodyRgx,
-  starCommentsRgx,
-} from "../Regex/sqfRegex";
 import {extractScope, findScopeBegin, findScopeEnd} from "./scopeParser"
 import { cfgFlags, isSqfFunction, sqfFunction } from "../sqfTypes";
 import * as fs from "fs";
@@ -23,30 +19,32 @@ export const addMissingDocstrings = (
 };
 
 /**
- * 
+ * extract the first function in the string
  * @param input 
  * @returns name and body of function, remaining is input with the function declaration removed.
  */
 export const extractFunction = (input: string): { name: string, body: string, remaining: string } | undefined => {
-  const fncDeclaration = new RegExp(/[a-zA-Z]\w* *= *{/,"g")
+  const fncDeclaration = new RegExp(/ [a-zA-Z]\w* *= *{/,"g")
 
   //find the beginning of the function scope
   const firstIndex = input.search(fncDeclaration)
+  if (firstIndex == -1)
+    return undefined
   const lastIndex = findScopeEnd(input, firstIndex)
   const fncString = input.substring(firstIndex, lastIndex+1)
   const scope = extractScope(fncString)
   if (scope === undefined) {
-    console.error("no body match:", JSON.stringify(input), " for regex: ", JSON.stringify(functionBodyRgx));
     return undefined
   }
 
-  const name = fncString.match(/[a-zA-Z]\w*/)![0]
+  const name = fncString.match(/ [a-zA-Z]\w*/)![0].substring(1)
   const body = scope.scope.substring(findScopeBegin(scope.scope,/{/)+1, scope.scope.length - 1)
   const remaining = input.substring(0, firstIndex) + input.substring(lastIndex+1)
   return { name: name, body: body, remaining: remaining.replace(fncString,"") }
 }
 
 export const parseFunctionsFromString = (fnc: string): sqfFunction | null => {
+  fnc = " " + fnc + " "
   fnc = unifyLinebreaks(fnc);
   fnc = removeLinebreaks(fnc);
 
@@ -55,20 +53,13 @@ export const parseFunctionsFromString = (fnc: string): sqfFunction | null => {
     return null
   const { name, body } = extracted
 
-  const docString = (() => {
-    const match = fnc.match(starCommentsRgx);
-    if (match !== null) return match[0];
-    else {
-      return "";
-    }
-  })();
-  const flags: cfgFlags = parseFunctionFlags(docString);
+  const flags: cfgFlags = parseFunctionFlags(""); //FIXME
   const pureName = name.replace(/.*fnc_/, "");
   const tag = name.replace(/_fnc.*/, "");
   return {
     globalName: name,
     code: body,
-    docString: docString,
+    docString: "//docString",
     filePath: "",
     flags: flags,
     pureName: pureName,
