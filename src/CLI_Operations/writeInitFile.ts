@@ -2,7 +2,8 @@ import { Command } from "commander";
 import { writeFile } from "../compile/writeFile";
 import * as fs from "fs";
 import { compileFileInit } from "../compile/compileSqf";
-import { findAllsqfFiles, parseFunctionsFromSingleFiles } from "../parse/sqfParser";
+import { parseFunctionsFromSingleFiles } from "../parse/sqfParser";
+import {findAllsqfFiles} from "../fileUtil";
 
 export const writeInitFile = (code: string, dir: string, fileName: string) => {
   if (!fs.existsSync(dir)) {

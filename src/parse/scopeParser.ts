@@ -1,5 +1,3 @@
-import {globalFncDef} from "../Regex/sqfRegex";
-
 /**
  *
  * @param myInput text input to search function in
@@ -54,10 +52,4 @@ export const extractScope = (input: string): {
  */
 export const findScopeBegin = (input: string, pattern: RegExp): number => {
     return input.search(pattern)
-}
-
-export const findFunctionScope = (cleanText: string): { start: number, end: number } | undefined => {
-    const start = findScopeBegin(cleanText, globalFncDef)
-    const end = findScopeEnd(cleanText, start)
-    return {start: start, end: end}
 }

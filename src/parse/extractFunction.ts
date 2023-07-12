@@ -1,6 +1,7 @@
-import {cleanStringAfterParsing, cleanStringForParsing, parseFunctionFlags} from "./sqfParser";
+import { parseFunctionFlags} from "./sqfParser";
 import {cfgFlags, sqfFunction} from "../sqfTypes";
 import {extractScope, findScopeBegin, findScopeEnd} from "./scopeParser";
+import {cleanStringAfterParsing, cleanStringForParsing} from "./cleanString";
 
 /**
  * extracts functions and returns parsed functions + remaining input string after extraction

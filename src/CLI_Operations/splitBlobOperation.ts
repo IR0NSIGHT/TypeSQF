@@ -1,10 +1,10 @@
 import * as fs from "fs";
-import {findAllsqfFiles, readFile} from "../parse/sqfParser";
 import {sqfFunction} from "../sqfTypes";
 import {saveSqfFunctionToExecutableFile} from "../compile/compileSqf";
 import {Command} from "commander";
 import {mkdirp} from "mkdirp";
 import {extractAllFunctionsFrom} from "../parse/extractFunction"
+import {findAllsqfFiles, readFile} from "../fileUtil";
 
 const warnDocstringDoesntExist = (fnc: sqfFunction) => {
     if (fnc.docString === null)

@@ -1,5 +1,5 @@
-import {cleanStringAfterParsing, cleanStringForParsing} from "./sqfParser";
 import {extractFirstFunctionFrom, extractAllFunctionsFrom} from "./extractFunction";
+import {cleanStringAfterParsing, cleanStringForParsing} from "./cleanString";
 
 
 describe("extractFirstFunction from string", () => {

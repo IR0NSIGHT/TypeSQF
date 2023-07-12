@@ -1,7 +1,6 @@
 import {cfgFlags, isSqfFunction, sqfFunction} from "../sqfTypes";
-import * as fs from "fs";
-import {globSync} from 'glob'
 import {extractAllFunctionsFrom} from "./extractFunction";
+import {readFile} from "../fileUtil";
 
 export const addMissingDocstrings = (
     fncs: sqfFunction[],
@@ -19,20 +18,6 @@ export const addMissingDocstrings = (
     });
 };
 
-
-export const cleanStringForParsing = (input: string): string => {
-    input = unifyLinebreaks(input)
-    input = " " + input + " "   //pad
-    return input
-}
-
-export const cleanStringAfterParsing = (input: string): string => {
-    const out = input.substring(1, input.length - 1)
-        .replace(new RegExp(" \n ","g"),"\n")
-        .replace(new RegExp(/;(( |\n)*;)+/,"g"),";") //remove space padding at end and start
-    return  out;
-}
-
 export const parseFunctionFlags = (docString: string): cfgFlags => {
     const flags: cfgFlags = {
         preInit: false,
@@ -46,21 +31,6 @@ export const parseFunctionFlags = (docString: string): cfgFlags => {
     flags.recompile = new RegExp("@recompile").test(docString);
     return flags;
 };
-
-export const readFile = (filePath: string): string => {
-    const outString = fs.readFileSync(filePath, "utf-8")
-    return outString
-}
-
-/**
- * unifies linebreaks
- * @param input
- * @returns
- */
-const unifyLinebreaks = (input: string): string => {
-    return input.replace(new RegExp("\r\n", "g"), "\n") //crlf to LF
-       .replace(new RegExp("\n", "g"), " \n ") //lf to crlf
-}
 
 export const parseFunctionsFromSingleFiles = (
     filePaths: string[]
@@ -81,12 +51,3 @@ export const parseFunctionsFromSingleFiles = (
     return addMissingDocstrings(functions);
 };
 
-/**
- * collect all filepaths starting with dirPath that end in .sqf
- * @param dirPath
- * @returns string array of paths from dirPath (including dirPath)
- */
-export const findAllsqfFiles = (dirPath: string): string[] => {
-    const allSqfFiles = globSync(dirPath + '/**/*.sqf')
-    return allSqfFiles;
-};
