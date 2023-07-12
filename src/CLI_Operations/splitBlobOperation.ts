@@ -1,5 +1,5 @@
 import * as fs from "fs";
-import {readFile} from "../parse/sqfParser";
+import {findAllsqfFiles, readFile} from "../parse/sqfParser";
 import {sqfFunction} from "../sqfTypes";
 import {saveSqfFunctionToExecutableFile} from "../compile/compileSqf";
 import {Command} from "commander";
@@ -71,19 +71,33 @@ export const addSplitBlobAction = (program: Command) => {
         .description(
             "Split a blobfile containing many function declarations into single-function-file executables."
         )
-        .argument("<blobfile>", "input path of blobfile")
-        .argument("[output directory]", "directory to write function files to", ".")
+        .argument("[output directory]", "directory to write function files to", "./functions")
+        .argument("<blobfile(s)...>", "input path(s) of blobfile or directory to search sqfs in")
         .option("--init", "init the functions from the blobfile")
         .option("--remove", "remove the parsed functions from the blobfile")
         .action(
             (
-                inPath: string,
                 targetDir: string,
+                inPaths: string[],
                 options: { init: boolean | undefined; remove: boolean | undefined }
             ) => {
                 //  const initFlag = options.init ? true : false;
                 const removeFlag = options.remove ? true : false;
-                performSplit(inPath, targetDir, removeFlag);
+                const nonExisting = inPaths.filter(p => !fs.existsSync(p));
+                if (nonExisting.length != 0) {
+                    console.error("not all paths exist:", nonExisting)
+                    return;
+                }
+
+                const existingPaths = inPaths.filter(p => fs.existsSync(p));
+                const files = existingPaths.filter(path => fs.lstatSync(path).isFile())
+                const dirs = existingPaths.filter(path => fs.lstatSync(path).isDirectory())
+                dirs.forEach(d => files.push(...findAllsqfFiles(d)))
+
+                console.log("split sqf files: ", files, " into target:", targetDir)
+
+                files.forEach(f => performSplit(f, targetDir, removeFlag))
+
             }
         );
 };
